@@ -1,9 +1,11 @@
 package com.example.recyclerview
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
 
 class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -11,14 +13,23 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
 
         val name = intent.getStringExtra("productName")
-        val image = intent.getIntExtra("productImage", R.drawable.ic_launcher_foreground)
+        val imageUri = intent.getStringExtra("productImage")
+
 
         val imgDetail = findViewById<ImageView>(R.id.imgDetail)
         val txtDetailName = findViewById<TextView>(R.id.txtDetailName)
         val btnAddToCart = findViewById<android.widget.Button>(R.id.btnAddToCart)
 
         txtDetailName.text = name
-        imgDetail.setImageResource(image)
+        if (!imageUri.isNullOrEmpty()) {
+            Glide.with(this)
+                .load(Uri.parse(imageUri))  // Convert String to URI
+                .placeholder(R.drawable.ic_launcher_foreground)
+                .into(imgDetail)
+        } else {
+            imgDetail.setImageResource(R.drawable.ic_launcher_foreground)
+        }
+
 
         createNotificationChannel()
         btnAddToCart.setOnClickListener {

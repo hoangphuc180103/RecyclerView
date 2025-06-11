@@ -6,6 +6,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+
 
 class ProductAdapter(
     private val products: List<Product>,
@@ -17,7 +19,13 @@ class ProductAdapter(
         val txtName: TextView = view.findViewById(R.id.txtProductName)
 
         fun bind(product: Product) {
-            imgProduct.setImageResource(product.imageResId)
+            Glide.with(itemView.context)
+                .load(product.imageUrl)
+                .placeholder(R.drawable.image)
+                .error(R.drawable.ic_error)
+                .into(imgProduct)
+
+
             txtName.text = product.name
             itemView.setOnClickListener {
                 onClick(product)
